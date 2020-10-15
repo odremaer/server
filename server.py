@@ -1,25 +1,18 @@
 import socket
-import signal
-import sys
+from views import *
 
-# def cb_sigint_handler(signum, stack):
-#     global is_interrupted
-#     print("SIGINT received")
-#     is_interrupted = True
-#
-# is_interrupted = False
-# signal.signal(signal.SIGINT, cb_sigint_handler)
+
 URLS = {
-    '/': 'hello index',
-    '/blog': 'hello blog'
+    '/': index,
+    '/blog': blog
 }
 
 
 def parse_request(request):
     parsed = request.split(' ')
-    print(parsed[0], parsed[1])
     method = parsed[0]
     url = parsed[1]
+
     return (method, url)
 
 
@@ -33,10 +26,21 @@ def generate_headers(method, url):
     return ('HTTP/1.1 200 OK\n\n', 200)
 
 
+def generate_content(code, url):
+    if code == 404:
+        return '<h1>404</h1><p>Not found</p>'
+    if code == 405:
+        return '<h1>405</h1><p>Method not allowed</p>'
+    return URLS[url]()
+
+
+
 def generate_response(request):
     method, url = parse_request(request)
     headers, code = generate_headers(method, url)
-    return (headers + 'hello world').encode()
+    body = generate_content(code, url)
+
+    return (headers + body).encode()
 
 
 
@@ -49,12 +53,11 @@ def run():
     serv_sock.listen()
 
     while True:
-        client_sock, client_addr = serv_sock.accept()
-        #client_address
+        client_sock, client_address = serv_sock.accept()
         request = client_sock.recv(1024)
         print(request)
         print()
-        print('Connected by ', client_addr)
+        print('Connected by ', client_address)
 
         response = generate_response(request.decode('utf-8'))
 
