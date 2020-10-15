@@ -1,5 +1,13 @@
 import socket
 from views import *
+import os
+from dotenv import load_dotenv
+
+project_folder = os.path.expanduser('.')
+load_dotenv(os.path.join(project_folder, '.env'))
+
+HOST = os.getenv('HOST')
+PORT = os.getenv('PORT')
 
 
 URLS = {
@@ -48,8 +56,7 @@ def run():
     serv_sock = socket.socket(socket.AF_INET,
                               socket.SOCK_STREAM)
     serv_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # для предотвращение ошибки с занятым адресом
-    serv_sock.bind(('localhost', 8080))
-    #PORT HOST
+    serv_sock.bind(('{}'.format(HOST), int(PORT)))
     serv_sock.listen()
 
     while True:
