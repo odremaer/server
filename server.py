@@ -3,6 +3,9 @@ from views import *
 import os
 from dotenv import load_dotenv
 
+
+
+
 project_folder = os.path.expanduser('.')
 load_dotenv(os.path.join(project_folder, '.env'))
 
@@ -16,6 +19,12 @@ URLS = {
 }
 
 
+def get_postvalue(request):
+    parsed = request.split('=')
+    return parsed[-1]
+
+
+# method and url (/ or /blog)
 def parse_request(request):
     parsed = request.split(' ')
     method = parsed[0]
@@ -25,6 +34,8 @@ def parse_request(request):
 
 
 def generate_headers(method, url):
+    if method == 'POST':
+        return ('HTTP/1.1 200 OK\n\n', 200)
     if not method == 'GET':
         return ('HTTP/1.1 405 Method not allowed\n\n', 405)
 
@@ -47,7 +58,7 @@ def generate_response(request):
     method, url = parse_request(request)
     headers, code = generate_headers(method, url)
     body = generate_content(code, url)
-
+    print(get_postvalue(request)) # type str
     return (headers + body).encode()
 
 
@@ -63,12 +74,11 @@ def run():
         client_sock, client_address = serv_sock.accept()
         request = client_sock.recv(1024)
         print(request)
-        print()
+        print(len(request))
         print('Connected by ', client_address)
-
-        response = generate_response(request.decode('utf-8'))
-
-        client_sock.sendall(response)
+        if len(request) != 0:
+            response = generate_response(request.decode('utf-8'))
+            client_sock.sendall(response)
         client_sock.close()
 
 
