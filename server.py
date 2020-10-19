@@ -1,22 +1,15 @@
 import socket
 from views import *
 import os
-from dotenv import load_dotenv
-
-
-
-
-project_folder = os.path.expanduser('.')
-load_dotenv(os.path.join(project_folder, '.env'))
-
-HOST = os.getenv('HOST')
-PORT = os.getenv('PORT')
+from config import HOST, PORT
 
 
 URLS = {
     '/': index,
     '/blog': blog
 }
+
+def save():
 
 
 def get_postvalue(request):
@@ -58,7 +51,8 @@ def generate_response(request):
     method, url = parse_request(request)
     headers, code = generate_headers(method, url)
     body = generate_content(code, url)
-    print(get_postvalue(request)) # type str
+    if method == 'POST':
+        print(get_postvalue(request)) # type str
     return (headers + body).encode()
 
 
