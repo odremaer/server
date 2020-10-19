@@ -1,8 +1,13 @@
 def index():
-    with open('templates/index.html') as template:
+    with open('tempates/index.html') as template:
         return template.read()
+
 
 
 def blog():
-    with open('templates/blog.html') as template:
+    with open('tempates/blog.html') as template:
         return template.read()
+
+def css(url):
+    with open('{}'.format(url).lstrip('/')) as css:
+        return css.read()

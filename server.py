@@ -1,16 +1,13 @@
 import socket
-from views import *
-import os
 from config import HOST, PORT
-
+from urls import URLS
+from views import *
+import re
 
 URLS = {
     '/': index,
-    '/blog': blog
+    '/blog': blog,
 }
-
-def save():
-
 
 def get_postvalue(request):
     parsed = request.split('=')
@@ -19,10 +16,12 @@ def get_postvalue(request):
 
 # method and url (/ or /blog)
 def parse_request(request):
+
     parsed = request.split(' ')
     method = parsed[0]
     url = parsed[1]
-
+    if re.search('.css', url):
+        URLS[url] = css
     return (method, url)
 
 
@@ -43,6 +42,9 @@ def generate_content(code, url):
         return '<h1>404</h1><p>Not found</p>'
     if code == 405:
         return '<h1>405</h1><p>Method not allowed</p>'
+    if re.search('.css', url):
+        URLS[url] = css(url)
+        return URLS[url]
     return URLS[url]()
 
 
@@ -67,7 +69,7 @@ def run():
     while True:
         client_sock, client_address = serv_sock.accept()
         request = client_sock.recv(1024)
-        print(request)
+        print(request.decode('utf-8'))
         print(len(request))
         print('Connected by ', client_address)
         if len(request) != 0:
