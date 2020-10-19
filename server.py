@@ -1,6 +1,5 @@
 import socket
 from config import HOST, PORT
-from urls import URLS
 from views import *
 import re
 
@@ -20,8 +19,11 @@ def parse_request(request):
     parsed = request.split(' ')
     method = parsed[0]
     url = parsed[1]
-    if re.search('.css', url):
-        URLS[url] = css
+    if re.search('js', url):
+        URLS[url] = static
+    if re.search('css', url):
+        URLS[url] = static
+
     return (method, url)
 
 
@@ -42,8 +44,11 @@ def generate_content(code, url):
         return '<h1>404</h1><p>Not found</p>'
     if code == 405:
         return '<h1>405</h1><p>Method not allowed</p>'
-    if re.search('.css', url):
-        URLS[url] = css(url)
+    if re.search('js', url):
+        URLS[url] = static(url)
+        return URLS[url]
+    if re.search('css', url):
+        URLS[url] = static(url)
         return URLS[url]
     return URLS[url]()
 
@@ -65,7 +70,8 @@ def run():
     serv_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # для предотвращение ошибки с занятым адресом
     serv_sock.bind(('{}'.format(HOST), int(PORT)))
     serv_sock.listen()
-
+    print('Server running on http://{}:{}/'.format(HOST, PORT))
+    print('Quit server with ^C')
     while True:
         client_sock, client_address = serv_sock.accept()
         request = client_sock.recv(1024)

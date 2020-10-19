@@ -8,6 +8,6 @@ def blog():
     with open('tempates/blog.html') as template:
         return template.read()
 
-def css(url):
-    with open('{}'.format(url).lstrip('/')) as css:
-        return css.read()
+def static(url):
+    with open('static/{}'.format(url).lstrip('/')) as static:
+        return static.read()
