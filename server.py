@@ -23,6 +23,8 @@ def parse_request(request):
         URLS[url] = static
     if re.search('css', url):
         URLS[url] = static
+    if re.search('img', url):
+        URLS[url] = img(url)
 
     return (method, url)
 
@@ -44,12 +46,17 @@ def generate_content(code, url):
         return '<h1>404</h1><p>Not found</p>'
     if code == 405:
         return '<h1>405</h1><p>Method not allowed</p>'
+
     if re.search('js', url):
         URLS[url] = static(url)
         return URLS[url]
     if re.search('css', url):
         URLS[url] = static(url)
         return URLS[url]
+    if re.search('img', url):
+        URLS[url] = img(url)
+        return URLS[url]
+
     return URLS[url]()
 
 
@@ -60,6 +67,9 @@ def generate_response(request):
     body = generate_content(code, url)
     if method == 'POST':
         print(get_postvalue(request)) # type str
+    print(type(body))
+    if re.search('img', url):
+        return (headers.encode() + body)
     return (headers + body).encode()
 
 
