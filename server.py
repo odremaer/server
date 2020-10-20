@@ -56,6 +56,9 @@ def generate_content(code, url):
     if code == 405:
         return '<h1>405</h1><p>Method not allowed</p>'
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 95d329f... static works for img, css and js
 
     if re.search('js', url):
         URLS[url] = static(url)
@@ -67,11 +70,14 @@ def generate_content(code, url):
         URLS[url] = img(url)
         return URLS[url]
 
+<<<<<<< HEAD
 =======
     if re.search('.css', url):
         URLS[url] = css(url)
         return URLS[url]
 >>>>>>> 5aebd31... can send any css files to server(working on static files)
+=======
+>>>>>>> 95d329f... static works for img, css and js
     return URLS[url]()
 
 

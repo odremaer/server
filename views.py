@@ -16,8 +16,11 @@ def static(url):
 def img(url):
     with open('static/{}'.format(url).lstrip('/'), 'rb') as static:
         return static.read()
+<<<<<<< HEAD
 =======
 def css(url):
     with open('{}'.format(url).lstrip('/')) as css:
         return css.read()
 >>>>>>> 5aebd31... can send any css files to server(working on static files)
+=======
+>>>>>>> 95d329f... static works for img, css and js
