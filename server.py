@@ -1,15 +1,10 @@
 import socket
 from config import HOST, PORT
-<<<<<<< HEAD
-=======
-from urls import URLS
->>>>>>> 5aebd31... can send any css files to server(working on static files)
 from views import *
 import re
 
 URLS = {
     '/': index,
-    '/blog': blog,
 }
 
 def get_postvalue(request):
@@ -23,7 +18,7 @@ def parse_request(request):
     parsed = request.split(' ')
     method = parsed[0]
     url = parsed[1]
-<<<<<<< HEAD
+
     if re.search('js', url):
         URLS[url] = static
     if re.search('css', url):
@@ -31,10 +26,6 @@ def parse_request(request):
     if re.search('img', url):
         URLS[url] = img(url)
 
-=======
-    if re.search('.css', url):
-        URLS[url] = css
->>>>>>> 5aebd31... can send any css files to server(working on static files)
     return (method, url)
 
 
@@ -55,10 +46,6 @@ def generate_content(code, url):
         return '<h1>404</h1><p>Not found</p>'
     if code == 405:
         return '<h1>405</h1><p>Method not allowed</p>'
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 95d329f... static works for img, css and js
 
     if re.search('js', url):
         URLS[url] = static(url)
@@ -70,14 +57,6 @@ def generate_content(code, url):
         URLS[url] = img(url)
         return URLS[url]
 
-<<<<<<< HEAD
-=======
-    if re.search('.css', url):
-        URLS[url] = css(url)
-        return URLS[url]
->>>>>>> 5aebd31... can send any css files to server(working on static files)
-=======
->>>>>>> 95d329f... static works for img, css and js
     return URLS[url]()
 
 
@@ -92,6 +71,7 @@ def generate_response(request):
     if re.search('img', url):
         return (headers.encode() + body)
     return (headers + body).encode()
+
 
 
 
