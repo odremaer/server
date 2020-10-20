@@ -6,6 +6,8 @@
    > python -m venv venv
 - Activate virtual environment with
    > venv/bin/activate
+- Install the requirements
+   > pip install -r requirements.txt
 - Run server with
    > python server.py
 #### use ctrl + c to stop the server
@@ -16,6 +18,8 @@
    > python -m venv venv
 - Activate virtual environment with
    > venv\Scripts\activate.bat
+- Install the requirements
+   > pip install -r requirements.txt
 - Run server with
    > python server.py
 #### use ctrl + c to stop the server
